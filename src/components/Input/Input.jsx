@@ -1,26 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 // import styles from './Feedback.module.scss';
 // import cn from 'classnames';
 
-class Input extends Component {
-  render() {
-    const { handleInput } = this.props;
-    console.log(this.props.value);
-    console.log('handleInput:', handleInput);
-    return (
-      <>
-        <div>
-          <p>Find contacts by name</p>
-          <input name="filter" onChange={handleInput} />
-        </div>
-      </>
-    );
-  }
-}
+const Input = ({ filterContact }) => {
+  const onChange = e => {
+    filterContact(e.target.value);
+  };
+
+  return (
+    <>
+      <div>
+        <p>Find contacts by name</p>
+        <input name="filter" onChange={onChange} />
+      </div>
+    </>
+  );
+};
 
 Input.propTypes = {
-  handleInput: PropTypes.func.isRequired,
+  filterContact: PropTypes.func.isRequired,
 };
 
 export { Input };

@@ -1,7 +1,11 @@
 import styles from '../ItemContacts/ItemContacts.module.scss';
 import PropTypes from 'prop-types';
 
-export const ItemContacts = ({ contacts, filter, userDelete, user }) => {
+export const ItemContacts = ({ userDelete, user }) => {
+  // const onDelete = e => {
+  //   userDelete(e.target.value);
+  // };
+
   return (
     <>
       <li key={user.id} id={user.id} className={styles.listItem}>
