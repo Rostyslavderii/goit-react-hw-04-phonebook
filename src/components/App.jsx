@@ -1,47 +1,74 @@
 import { Component } from 'react';
-// import styles from './Feedback.module.scss';
-// import cn from 'classnames';
-import { Statistics } from './Statistics/Statistics';
-import FeedbackOptions from './FeedbackOptions/FeedbackOptions ';
+import { nanoid } from 'nanoid';
 import { Section } from './Section/Section';
-import { Notification } from './Notification ';
-import Form from './Form';
+import { FormAddContact } from './FormAddContact/FormAddContact';
+import { ListContacts } from './ListContacts/ListContacts';
+import { Input } from './Input/Input';
 
 class App extends Component {
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-    total: 0,
-    feedback: 0,
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
+    name: '',
+    number: '',
   };
 
-  onLeaveFeedback = key => {
-    this.setState(prevState => ({ [key]: prevState[key] + 1 }));
-    // this.countTotalFeedback();
-    // this.countPositiveFeedbackPercentage();
-    //
+  // onLeaveFeedback = e => {
+  //   this.setState(prevState => ({ [key]: prevState[key] + 1 }));
+  //   // this.countTotalFeedback();
+  //   // this.countPositiveFeedbackPercentage();
+  //   //
+  // };
+
+  deleteContact = e => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(
+        contact => contact.id !== e.target.value
+      ),
+    }));
+  };
+
+  handleInput = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
+  };
+
+  addNewContact = (name, number) => {
+    const newContact = {
+      name: name,
+      number: number,
+      id: nanoid(),
+    };
+
+    this.setState(prevState => ({
+      contacts: [
+        newContact,
+        ...prevState.contacts,
+      ] /* (data +good:1, good:2, good:3,) */,
+    }));
   };
 
   render() {
-    const { good, neutral, bad } = this.state;
-    const message = 'There is no feedback';
     return (
       <>
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={this.state}
-            onLeaveFeedback={this.onLeaveFeedback}
+        <Section title="Phonebook">
+          <FormAddContact
+            addNewContact={this.addNewContact}
+            handleInput={this.handleInput}
           />
-          {good === 0 && neutral === 0 && bad === 0 ? (
-            <Notification message={message} /> //true?
-          ) : (
-            <Statistics value={this.state} /> //false?
-          )}
-          {/* {<Notification message={message} /> || this.onLeaveFeedback()}
-          {to && (<Statistics value={this.state} />)} */}
         </Section>
-        <Form />
+        <Section title="Contacts">
+          <Input handleInput={this.handleInput} />
+          <ListContacts
+            contacts={this.state.contacts}
+            filter={this.state.filter}
+            userDelete={this.deleteContact}
+          />
+        </Section>
       </>
     );
   }
